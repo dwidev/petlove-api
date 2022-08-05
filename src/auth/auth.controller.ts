@@ -6,6 +6,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { AUTH_ENDPOINT } from 'src/utils/constant/endpoint.constant';
 import { AuthService } from './auth.service';
 import { GetJwtPayload } from './decorators/jwt-payload.decorator';
 import { Public } from './decorators/public.decorator';
@@ -17,7 +18,7 @@ import {
   IJwtPayloadWithRefresToken,
 } from './interface/jwt-payload.interface';
 
-@Controller('petlove/api/v1/auth')
+@Controller(AUTH_ENDPOINT)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -41,8 +42,8 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')
+  @UseGuards(JwtRefreshAuthGuard)
   @HttpCode(HttpStatus.OK)
   refreshToken(@GetJwtPayload() payload: IJwtPayloadWithRefresToken) {
     return this.authService.refreshToken(payload.id, payload.refreshToken);

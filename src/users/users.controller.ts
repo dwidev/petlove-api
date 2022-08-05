@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { USER_ENDPOINT } from 'src/utils/constant/endpoint.constant';
 
-@Controller('petlove/api/v1/users')
+@Controller(USER_ENDPOINT)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

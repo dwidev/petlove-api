@@ -16,7 +16,7 @@ export class UserDto {
 
   @IsDefined()
   @MaxLength(15)
-  @IsNotEmpty({ message: 'not empty' })
+  @IsNotEmpty()
   @IsUnique([User, 'username'])
   username: string;
 

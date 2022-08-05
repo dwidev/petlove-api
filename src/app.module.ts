@@ -9,6 +9,8 @@ import { User } from './users/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { listValidatorProvider } from './utils/validator/validator.providers';
+import { PetCategoryModule } from './pet-category/pet-category.module';
+import { PetCategory } from './pet-category/entities/pet-category.entity';
 
 @Module({
   imports: [
@@ -20,11 +22,12 @@ import { listValidatorProvider } from './utils/validator/validator.providers';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, PetCategory],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
+    PetCategoryModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,6 +6,7 @@ import {
 import { NestFactory, Reflector } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './utils/filters/all-exception.filters';
 import { BadRequestExceptionFilter } from './utils/filters/bad-request-exception.filters';
 
 async function bootstrap() {
@@ -13,7 +14,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidUnknownValues: true,
+      // forbidUnknownValues: false,
       transform: true,
       validateCustomDecorators: true,
       transformOptions: {
@@ -22,9 +23,13 @@ async function bootstrap() {
     }),
   );
 
+  // for  handle inject datasource of validator
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(...[new BadRequestExceptionFilter()]);
+  app.useGlobalFilters(
+    ...[new HttpExceptionFilter(), new BadRequestExceptionFilter()],
+  );
   await app.listen(3000);
 }
 bootstrap();
