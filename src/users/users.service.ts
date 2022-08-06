@@ -38,6 +38,17 @@ export class UsersService {
     return this.userRepository.find({ relations: ['user_delivery_address'] });
   }
 
+  async getUserDeliveryAddress(
+    userUuid: number,
+  ): Promise<UserDeliveryAddress[]> {
+    const user = new User();
+    user.id = userUuid;
+
+    return await this.userDeliveryRepo.find({
+      where: { user: user },
+    });
+  }
+
   async addUserDeliveryAddress(
     createUserDeliveryDto: CreateUserDeliveryAddressDto,
   ): Promise<UserDeliveryAddress> {
