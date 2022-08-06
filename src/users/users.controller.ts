@@ -14,6 +14,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { USER_ENDPOINT } from 'src/utils/constant/endpoint.constant';
+import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
+import { GetJwtPayload } from 'src/auth/decorators/jwt-payload.decorator';
+import { InjectUserToBody } from './decorators/inject-user-body.decorator';
 
 @Controller(USER_ENDPOINT)
 export class UsersController {
@@ -33,5 +36,14 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Post('delivery-address')
+  addUserDeliveryAddress(
+    @InjectUserToBody() createDeliveryAddressDto: CreateUserDeliveryAddressDto,
+  ) {
+    console.log(createDeliveryAddressDto);
+
+    return this.usersService.addUserDeliveryAddress(createDeliveryAddressDto);
   }
 }

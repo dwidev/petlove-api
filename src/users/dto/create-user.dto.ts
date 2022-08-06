@@ -1,5 +1,6 @@
 import { OmitType } from '@nestjs/mapped-types';
 import {
+  IsArray,
   IsDefined,
   IsEmail,
   IsInt,

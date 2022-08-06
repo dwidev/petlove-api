@@ -11,6 +11,7 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { listValidatorProvider } from './utils/validator/validator.providers';
 import { PetCategoryModule } from './pet-category/pet-category.module';
 import { PetCategory } from './pet-category/entities/pet-category.entity';
+import { UserDeliveryAddress } from './users/entities/user-delivery-address.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { PetCategory } from './pet-category/entities/pet-category.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, PetCategory],
+      entities: [User, UserDeliveryAddress, PetCategory],
       synchronize: true,
     }),
     UsersModule,
