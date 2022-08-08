@@ -12,6 +12,8 @@ import { listValidatorProvider } from './utils/validator/validator.providers';
 import { PetCategoryModule } from './pet-category/pet-category.module';
 import { PetCategory } from './pet-category/entities/pet-category.entity';
 import { UserDeliveryAddress } from './users/entities/user-delivery-address.entity';
+import { MerchantModule } from './merchant/merchant.module';
+import { Merchant } from './merchant/entities/merchant.entity';
 
 @Module({
   imports: [
@@ -23,12 +25,13 @@ import { UserDeliveryAddress } from './users/entities/user-delivery-address.enti
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, UserDeliveryAddress, PetCategory],
+      entities: [User, UserDeliveryAddress, PetCategory, Merchant],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
     PetCategoryModule,
+    MerchantModule,
   ],
   controllers: [AppController],
   providers: [
