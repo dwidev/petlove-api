@@ -14,6 +14,8 @@ import { PetCategory } from './pet-category/entities/pet-category.entity';
 import { UserDeliveryAddress } from './users/entities/user-delivery-address.entity';
 import { MerchantModule } from './merchant/merchant.module';
 import { Merchant } from './merchant/entities/merchant.entity';
+import { ProductModule } from './product/product.module';
+import { Product } from './product/entities/product.entity';
 
 @Module({
   imports: [
@@ -25,13 +27,14 @@ import { Merchant } from './merchant/entities/merchant.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, UserDeliveryAddress, PetCategory, Merchant],
+      entities: [User, UserDeliveryAddress, PetCategory, Merchant, Product],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
     PetCategoryModule,
     MerchantModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [
