@@ -11,7 +11,7 @@ import { PetCategoryService } from './pet-category.service';
 import { CreatePetCategoryDto } from './dto/create-pet-category.dto';
 import { UpdatePetCategoryDto } from './dto/update-pet-category.dto';
 import { PET_CATEGORY_ENDPOINT } from 'src/utils/constant/endpoint.constant';
-import { PetCategoryUUIDDto } from './dto/pet-category.dto';
+import { PetCategoryCodeDto } from './dto/pet-category.dto';
 
 @Controller(PET_CATEGORY_ENDPOINT)
 export class PetCategoryController {
@@ -27,21 +27,21 @@ export class PetCategoryController {
     return this.petCategoryService.findAll();
   }
 
-  @Get(':uuid')
-  findOne(@Param() params: PetCategoryUUIDDto) {
-    return this.petCategoryService.findOne(params.uuid);
+  @Get(':code')
+  findOne(@Param() params: PetCategoryCodeDto) {
+    return this.petCategoryService.findOne(params.code);
   }
 
-  @Patch(':uuid')
+  @Patch(':code')
   update(
-    @Param() params: PetCategoryUUIDDto,
+    @Param() params: PetCategoryCodeDto,
     @Body() updatePetCategoryDto: UpdatePetCategoryDto,
   ) {
-    return this.petCategoryService.update(params.uuid, updatePetCategoryDto);
+    return this.petCategoryService.update(params.code, updatePetCategoryDto);
   }
 
-  @Delete(':uuid')
-  remove(@Param() params: PetCategoryUUIDDto) {
-    return this.petCategoryService.remove(params.uuid);
+  @Delete(':code')
+  remove(@Param() params: PetCategoryCodeDto) {
+    return this.petCategoryService.remove(params.code);
   }
 }

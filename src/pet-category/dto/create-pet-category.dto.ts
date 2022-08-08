@@ -4,4 +4,8 @@ import { IsUnique } from 'src/utils/validator/unique-data.validator';
 import { PetCategory } from '../entities/pet-category.entity';
 import { PetCategoryDto } from './pet-category.dto';
 
-export class CreatePetCategoryDto extends OmitType(PetCategoryDto, ['id']) {}
+export class CreatePetCategoryDto extends OmitType(PetCategoryDto, ['code']) {
+  @IsDefined()
+  @IsNotEmpty()
+  code: string;
+}

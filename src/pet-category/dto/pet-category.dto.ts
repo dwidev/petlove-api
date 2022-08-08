@@ -5,11 +5,10 @@ import { IsUnique } from 'src/utils/validator/unique-data.validator';
 import { PetCategory } from '../entities/pet-category.entity';
 
 export class PetCategoryDto {
-  id: number;
-
   @IsDefined()
-  @CheckExistData([{ entity: PetCategory, property: 'uuid' }])
-  uuid: string;
+  @IsNotEmpty()
+  @CheckExistData([{ entity: PetCategory, property: 'code' }])
+  code: string;
 
   @IsDefined()
   @IsNotEmpty()
@@ -17,4 +16,4 @@ export class PetCategoryDto {
   category_name: string;
 }
 
-export class PetCategoryUUIDDto extends PickType(PetCategoryDto, ['uuid']) {}
+export class PetCategoryCodeDto extends PickType(PetCategoryDto, ['code']) {}

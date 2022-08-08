@@ -2,17 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class PetCategory {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ unique: true })
-  uuid: string;
+  @PrimaryColumn({ length: 10 })
+  code: string;
 
   @Column({ length: 20 })
   category_name: string;

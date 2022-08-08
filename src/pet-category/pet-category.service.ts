@@ -16,7 +16,6 @@ export class PetCategoryService {
   async create(
     createPetCategoryDto: CreatePetCategoryDto,
   ): Promise<PetCategory> {
-    createPetCategoryDto.uuid = generateUuid();
     return this.petCategoryRepo.save(createPetCategoryDto);
   }
 
@@ -24,15 +23,15 @@ export class PetCategoryService {
     return this.petCategoryRepo.find();
   }
 
-  async findOne(uuid: string): Promise<PetCategory | undefined | null> {
-    return this.petCategoryRepo.findOne({ where: { uuid } });
+  async findOne(code: string): Promise<PetCategory | undefined | null> {
+    return this.petCategoryRepo.findOne({ where: { code } });
   }
 
-  async update(uuid: string, updatePetCategoryDto: UpdatePetCategoryDto) {
-    return this.petCategoryRepo.update({ uuid }, updatePetCategoryDto);
+  async update(code: string, updatePetCategoryDto: UpdatePetCategoryDto) {
+    return this.petCategoryRepo.update({ code }, updatePetCategoryDto);
   }
 
-  async remove(uuid: string) {
-    return this.petCategoryRepo.delete({ uuid });
+  async remove(code: string) {
+    return this.petCategoryRepo.delete({ code });
   }
 }
