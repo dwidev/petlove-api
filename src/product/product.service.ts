@@ -1,23 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationParamsDto } from 'src/utils/dto/pagination.dto';
+import { PaginationService } from 'src/utils/services/pagination/pagination.service';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
 @Injectable()
-export class ProductService {
+export class ProductService extends PaginationService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
-  ) {}
+  ) {
+    super();
+  }
 
   create(createProductDto: CreateProductDto) {
     return 'This action adds a new product';
   }
 
-  findAll() {
-    return this.productRepo.find({ relations: ['pet_category', 'merchant'] });
+  findAll(params: PaginationParamsDto) {
+    return this.generatePage(params, this.productRepo, {
+      relations: ['pet_category', 'merchant'],
+    });
   }
 
   findOne(id: number) {

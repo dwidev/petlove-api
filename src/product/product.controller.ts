@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PRODUCT_ENDPOINT } from 'src/utils/constant/endpoint.constant';
+import { QueryProductDto } from './dto/query-product.dto';
 
 @Controller(PRODUCT_ENDPOINT)
 export class ProductController {
@@ -22,8 +24,8 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(@Query() params: QueryProductDto) {
+    return this.productService.findAll(params);
   }
 
   @Get(':id')
