@@ -4,7 +4,10 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserDeliveryAddress } from './entities/user-delivery-address.entity';
 import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
-import { UserAlreadyException } from './exceptions/already-user.exception';
+import {
+  UserAlreadyException,
+  UserNotFoundException,
+} from './exceptions/user.exception';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
@@ -16,10 +19,16 @@ export class UsersService {
   ) {}
 
   async getUserByAccountID(accountID: string): Promise<User> {
-    return this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { account: { uuid: accountID } },
       relations: { account: true },
     });
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
   }
 
   async createUserProfile(createUserDto: CreateUserDto): Promise<User> {

@@ -6,3 +6,9 @@ export class UserAlreadyException extends BaseException {
     super('Users already exist', HttpStatus.BAD_REQUEST);
   }
 }
+
+export class UserNotFoundException extends BaseException {
+  constructor() {
+    super('Users not found', HttpStatus.NOT_FOUND);
+  }
+}
