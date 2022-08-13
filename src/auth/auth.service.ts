@@ -4,25 +4,24 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
 import { AuthDto } from './dto/auth.dto';
 import { toCompare, toHash } from 'src/utils/functions/bcrypt.function';
 import { ITokenResponse } from './interface/token.interface';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthRegisterDto } from './dto/auth-register.dto';
 import { IJwtPayload } from './interface/jwt-payload.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Account } from './entities/account.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userServices: UsersService,
+    @InjectRepository(Account) readonly accountRepo: Repository<Account>,
     private jwtServices: JwtService,
   ) {}
 
-  async checkPassword(user: User, password: string): Promise<boolean> {
-    return await toCompare(password, user.password);
+  async checkPassword(account: Account, password: string): Promise<boolean> {
+    return await toCompare(password, account.password);
   }
 
   /**
@@ -32,47 +31,46 @@ export class AuthService {
    */
   async login(data: AuthDto) {
     const { username, password } = data;
+    const whereQuery = { username };
+    const account = await this.accountRepo.findOneBy(whereQuery);
 
-    const user = await this.userServices.getUserByUsername(username);
-
-    if (!user) {
+    if (!account) {
       throw new BadRequestException('not valid account!!');
     }
 
-    const validPass = await this.checkPassword(user, password);
+    const validPass = await this.checkPassword(account, password);
 
     if (!validPass) {
       throw new BadRequestException('wrong password!!');
     }
 
-    const requestToken = await this.requestToken(user);
-    await this.updateRefreshToken(user.id, requestToken.accessToken);
-
+    const requestToken = await this.requestToken(account);
+    this.updateRefreshTokenOnAccount(account.uuid, requestToken.accessToken);
     return requestToken;
   }
 
   /**
    * Function for handle register of user request
-   * @param data is AuthRegisterDto
+   * @param authRegisterDto is AuthRegisterDto
    * @returns token like accessToken and refreshToken
    */
-  async register(data: AuthRegisterDto): Promise<ITokenResponse> {
-    const userDto = new CreateUserDto();
-    userDto.username = data.username;
-    userDto.password = data.password;
-    userDto.email = data.email;
-    const user = await this.userServices.create(userDto);
+  async register(authRegisterDto: AuthRegisterDto): Promise<ITokenResponse> {
+    authRegisterDto.password = await toHash(authRegisterDto.password);
+    const account = await this.accountRepo.save(authRegisterDto);
 
-    const token = await this.requestToken(user);
-    await this.updateRefreshToken(user.id, token.refreshToken);
+    const token = await this.requestToken(account);
+    this.updateRefreshTokenOnAccount(account.uuid, token.refreshToken);
     return token;
   }
 
-  private async updateRefreshToken(userId: number, refreshToken: string) {
-    const data = new UpdateUserDto();
-    data.id = userId;
-    data.refresh_token = await toHash(refreshToken);
-    await this.userServices.update(data);
+  private async updateRefreshTokenOnAccount(
+    uuid: string,
+    refreshToken: string,
+  ) {
+    const tokenHash = await toHash(refreshToken);
+    await this.accountRepo.update(uuid, {
+      refresh_token: tokenHash,
+    });
   }
 
   /**
@@ -80,10 +78,10 @@ export class AuthService {
    * @param user params for set payload token with uuid of user
    * @returns token
    */
-  private async requestToken(user: User): Promise<ITokenResponse> {
+  private async requestToken(account: Account): Promise<ITokenResponse> {
     const tokenPayload: IJwtPayload = {
-      id: user.id,
-      uuid: user.uuid,
+      uuid: account.uuid,
+      username: account.username,
     };
     const [accessToken, refreshToken] = await Promise.all<string>([
       this.jwtServices.signAsync(tokenPayload, {
@@ -103,29 +101,26 @@ export class AuthService {
   }
 
   async refreshToken(
-    id: number,
+    uuid: string,
     refreshToken: string,
   ): Promise<ITokenResponse> {
-    const user = await this.userServices.userRepository.findOneBy({
-      id,
+    const account = await this.accountRepo.findOneBy({
+      uuid,
     });
 
-    if (!user) throw new ForbiddenException();
+    if (!account) throw new ForbiddenException();
 
-    const compare = await toCompare(refreshToken, user.refresh_token ?? '');
+    const compare = await toCompare(refreshToken, account.refresh_token ?? '');
 
     if (!compare) throw new ForbiddenException();
 
-    const token = await this.requestToken(user);
-    await this.updateRefreshToken(user.id, token.refreshToken);
+    const token = await this.requestToken(account);
+    this.updateRefreshTokenOnAccount(account.uuid, token.refreshToken);
     return token;
   }
 
-  async logout(id: number): Promise<Object> {
-    const updateDto = new UpdateUserDto();
-    updateDto.id = id;
-    updateDto.refresh_token = null;
-    await this.userServices.update(updateDto);
+  async logout(uuid: string): Promise<Object> {
+    await this.accountRepo.update(uuid, { refresh_token: null });
     return { message: 'logout is success' };
   }
 }

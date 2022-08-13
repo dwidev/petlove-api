@@ -38,7 +38,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetJwtPayload() payload: IJwtPayload) {
-    return this.authService.logout(payload.id);
+    return this.authService.logout(payload.uuid);
   }
 
   @Public()
@@ -46,6 +46,6 @@ export class AuthController {
   @UseGuards(JwtRefreshAuthGuard)
   @HttpCode(HttpStatus.OK)
   refreshToken(@GetJwtPayload() payload: IJwtPayloadWithRefresToken) {
-    return this.authService.refreshToken(payload.id, payload.refreshToken);
+    return this.authService.refreshToken(payload.uuid, payload.refreshToken);
   }
 }

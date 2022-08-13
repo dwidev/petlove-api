@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generateUuid } from 'src/utils/functions/generate-uuid.funtion';
 import { Repository } from 'typeorm';
 import { CreatePetCategoryDto } from './dto/create-pet-category.dto';
 import { UpdatePetCategoryDto } from './dto/update-pet-category.dto';

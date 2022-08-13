@@ -28,9 +28,9 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('delivery-address')
+  @Get('delivery-address/:user_id')
   getUserDeliveryAddress(@GetJwtPayload() payload: IJwtPayload) {
-    return this.usersService.getUserDeliveryAddress(payload.id);
+    return this.usersService.getUserDeliveryAddress(1);
   }
 
   @Post('delivery-address')

@@ -18,21 +18,6 @@ export class User {
   @Column({ unique: true })
   uuid: string;
 
-  @Column({ unique: true })
-  username: string;
-
-  @Column()
-  @IsEmail()
-  email: string;
-
-  @Column()
-  @Exclude()
-  password: string;
-
-  @Column({ type: 'text', nullable: true })
-  @Exclude()
-  refresh_token: string;
-
   @OneToMany(() => UserDeliveryAddress, (useraddress) => useraddress.user)
   user_delivery_address: UserDeliveryAddress[];
 }

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { generateUuid } from 'src/utils/functions/generate-uuid.funtion';
+import { generateUuid } from 'src/utils/functions/generate-uuid.function';
 import { toHash } from 'src/utils/functions/bcrypt.function';
 import { UserDeliveryAddress } from './entities/user-delivery-address.entity';
 import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
@@ -16,13 +16,6 @@ export class UsersService {
     @InjectRepository(UserDeliveryAddress)
     private readonly userDeliveryRepo: Repository<UserDeliveryAddress>,
   ) {}
-
-  getUserByUsername(username: string): Promise<User | undefined> {
-    const whereQuery = { username };
-    const user = this.userRepository.findOneBy(whereQuery);
-
-    return user;
-  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     createUserDto.uuid = generateUuid();

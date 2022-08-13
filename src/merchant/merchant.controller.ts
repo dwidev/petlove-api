@@ -1,14 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MerchantService } from './merchant.service';
 import { CreateMerchantDto } from './dto/create-merchant.dto';
 import { UpdateMerchantDto } from './dto/update-merchant.dto';
+import { InjectUserToBody } from 'src/users/decorators/inject-user-body.decorator';
+import { userInfo } from 'os';
+import { MERCHANT_ENDPOINT } from 'src/utils/constant/endpoint.constant';
 
-@Controller('merchant')
+@Controller(MERCHANT_ENDPOINT)
 export class MerchantController {
   constructor(private readonly merchantService: MerchantService) {}
 
   @Post()
-  create(@Body() createMerchantDto: CreateMerchantDto) {
+  create(
+    @InjectUserToBody() user,
+    @Body() createMerchantDto: CreateMerchantDto,
+  ) {
+    console.log(user);
     return this.merchantService.create(createMerchantDto);
   }
 
@@ -23,7 +38,10 @@ export class MerchantController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMerchantDto: UpdateMerchantDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMerchantDto: UpdateMerchantDto,
+  ) {
     return this.merchantService.update(+id, updateMerchantDto);
   }
 
