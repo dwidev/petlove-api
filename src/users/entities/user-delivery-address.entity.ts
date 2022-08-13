@@ -25,7 +25,7 @@ export class UserDeliveryAddress {
   @Column()
   selected: boolean;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.uuid)
   @JoinColumn({ name: 'user_uuid' })
   user: User;
 }

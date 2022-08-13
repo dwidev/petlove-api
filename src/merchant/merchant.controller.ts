@@ -10,7 +10,7 @@ import {
 import { MerchantService } from './merchant.service';
 import { CreateMerchantDto } from './dto/create-merchant.dto';
 import { UpdateMerchantDto } from './dto/update-merchant.dto';
-import { InjectUserToBody } from 'src/users/decorators/inject-user-body.decorator';
+import { InjectTokenPayload } from 'src/auth/decorators/inject-account-body.decorator';
 import { userInfo } from 'os';
 import { MERCHANT_ENDPOINT } from 'src/utils/constant/endpoint.constant';
 
@@ -20,7 +20,7 @@ export class MerchantController {
 
   @Post()
   create(
-    @InjectUserToBody() user,
+    @InjectTokenPayload() user,
     @Body() createMerchantDto: CreateMerchantDto,
   ) {
     console.log(user);

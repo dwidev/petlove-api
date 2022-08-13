@@ -1,6 +1,5 @@
 import { PickType } from '@nestjs/mapped-types';
 import { IsDefined, IsEmail, IsNotEmpty, isNotEmpty } from 'class-validator';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 export class AuthRegisterDto {
   uuid: string;

@@ -1,3 +1,4 @@
+import { Account } from 'src/auth/entities/account.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -13,9 +14,9 @@ export class Merchant {
   @PrimaryColumn('uuid')
   uuid: string;
 
-  @OneToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @OneToOne(() => Account, (acc) => acc.uuid)
+  @JoinColumn({ name: 'account_id' })
+  user: Account;
 
   @Column({ length: 20 })
   merchant_name: string;

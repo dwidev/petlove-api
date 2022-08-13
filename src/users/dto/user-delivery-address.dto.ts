@@ -1,7 +1,6 @@
-import { OmitType, PartialType, PickType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { IsDefined, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
 import { User } from '../entities/user.entity';
-import { UserDto } from './create-user.dto';
 
 export class UserDeliveryAddressDto {
   id: number;
