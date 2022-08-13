@@ -6,10 +6,17 @@ import { GetJwtPayload } from 'src/auth/decorators/jwt-payload.decorator';
 import { InjectTokenPayload } from '../auth/decorators/inject-account-body.decorator';
 import { IJwtPayload } from 'src/auth/interface/jwt-payload.interface';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { AccountDto, AccountUuidDto } from 'src/auth/dto/account.dto';
+import { InjectAccountUuid } from 'src/auth/decorators/inject-account-uuid.decorator';
 
 @Controller(USER_ENDPOINT)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('profile')
+  getUserProfile(@InjectAccountUuid() accountUuid: string) {
+    return this.usersService.getUserByAccountID(accountUuid);
+  }
 
   @Post('profile')
   userProfile(@InjectTokenPayload() createUserDto: CreateUserDto) {

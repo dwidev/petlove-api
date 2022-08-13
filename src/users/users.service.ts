@@ -15,6 +15,13 @@ export class UsersService {
     private readonly userDeliveryRepo: Repository<UserDeliveryAddress>,
   ) {}
 
+  async getUserByAccountID(accountID: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { account: { uuid: accountID } },
+      relations: { account: true },
+    });
+  }
+
   async createUserProfile(createUserDto: CreateUserDto): Promise<User> {
     const alreadyUser =
       (await this.userRepository.count({
@@ -39,7 +46,7 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
-      relations: ['account', 'user_delivery_address'],
+      relations: { account: true, user_delivery_address: true },
     });
   }
 
