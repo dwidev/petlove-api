@@ -17,7 +17,7 @@ export class Product {
   @Column({ length: 225 })
   uuid: string;
 
-  @PrimaryColumn({ length: 10 })
+  @PrimaryColumn({ length: 20 })
   product_code: string;
 
   @ManyToOne(() => PetCategory, (petcat) => petcat.code)
@@ -43,7 +43,7 @@ export class Product {
   @Column({ type: 'decimal' })
   price: number;
 
-  @Column()
+  @Column({ default: 0 })
   soft_delete: boolean;
 
   @CreateDateColumn()
