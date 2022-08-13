@@ -3,8 +3,6 @@ import { IsDefined, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
 import { User } from '../entities/user.entity';
 
 export class UserDeliveryAddressDto {
-  id: number;
-
   uuid: string;
 
   @IsDefined()
@@ -20,7 +18,7 @@ export class UserDeliveryAddressDto {
 
 export class CreateUserDeliveryAddressDto extends OmitType(
   UserDeliveryAddressDto,
-  ['id'],
+  ['uuid'],
 ) {}
 
 export class UpdateUserDeliveryAddressDto extends PartialType(

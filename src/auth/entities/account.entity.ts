@@ -1,10 +1,9 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Account {
-  @PrimaryColumn()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
   @Column({ unique: true })
