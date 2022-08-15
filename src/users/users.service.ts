@@ -8,7 +8,7 @@ import {
   UserAlreadyException,
   UserNotFoundException,
 } from './exceptions/user.exception';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -72,7 +72,7 @@ export class UsersService {
 
   async addUserDeliveryAddress(
     createUserDeliveryDto: CreateUserDeliveryAddressDto,
-  ): Promise<UserDeliveryAddress> {
-    return await this.userDeliveryRepo.save(createUserDeliveryDto);
+  ): Promise<void> {
+    await this.userDeliveryRepo.save(createUserDeliveryDto);
   }
 }

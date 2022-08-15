@@ -1,6 +1,7 @@
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { IsDefined, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
-import { User } from '../entities/user.entity';
+import { Account } from 'src/auth/entities/account.entity';
+import { UserDto } from './user.dto';
 
 export class UserDeliveryAddressDto {
   uuid: string;
@@ -13,7 +14,7 @@ export class UserDeliveryAddressDto {
   selected: boolean;
 
   @IsObject()
-  user: User;
+  user: UserDto;
 }
 
 export class CreateUserDeliveryAddressDto extends OmitType(

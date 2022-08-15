@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { USER_ENDPOINT } from 'src/utils/constant/endpoint.constant';
 import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
@@ -6,8 +13,8 @@ import { GetJwtPayload } from 'src/auth/decorators/jwt-payload.decorator';
 import { InjectTokenPayload } from '../auth/decorators/inject-account-body.decorator';
 import { IJwtPayload } from 'src/auth/interface/jwt-payload.interface';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { AccountDto, AccountUuidDto } from 'src/auth/dto/account.dto';
 import { InjectAccountUuid } from 'src/auth/decorators/inject-account-uuid.decorator';
+import { InjetUserToBody } from './interceptors/inject-user-to-body.interceptor';
 
 @Controller(USER_ENDPOINT)
 export class UsersController {
@@ -39,9 +46,9 @@ export class UsersController {
   }
 
   @Post('delivery-address')
+  @UseInterceptors(InjetUserToBody)
   addUserDeliveryAddress(
-    @InjectTokenPayload()
-    createDeliveryAddressDto: CreateUserDeliveryAddressDto,
+    @Body() createDeliveryAddressDto: CreateUserDeliveryAddressDto,
   ) {
     return this.usersService.addUserDeliveryAddress(createDeliveryAddressDto);
   }
