@@ -5,13 +5,16 @@ import {
   Patch,
   Body,
   UseInterceptors,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { USER_ENDPOINT } from 'src/utils/constant/endpoint.constant';
-import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
-import { GetJwtPayload } from 'src/auth/decorators/jwt-payload.decorator';
+import {
+  CreateUserDeliveryAddressDto,
+  UpdateUserDeliveryAddressDto,
+} from './dto/user-delivery-address.dto';
 import { InjectTokenPayload } from '../auth/decorators/inject-account-body.decorator';
-import { IJwtPayload } from 'src/auth/interface/jwt-payload.interface';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { InjectAccountUuid } from 'src/auth/decorators/inject-account-uuid.decorator';
 import { InjetUserToBody } from './interceptors/inject-user-to-body.interceptor';
@@ -41,8 +44,8 @@ export class UsersController {
   }
 
   @Get('delivery-address/:user_id')
-  getUserDeliveryAddress(@GetJwtPayload() payload: IJwtPayload) {
-    return this.usersService.getUserDeliveryAddress('');
+  getUserDeliveryAddress(@Param('user_id') params: string) {
+    return this.usersService.getUserDeliveryAddress(params);
   }
 
   @Post('delivery-address')
@@ -51,5 +54,21 @@ export class UsersController {
     @Body() createDeliveryAddressDto: CreateUserDeliveryAddressDto,
   ) {
     return this.usersService.addUserDeliveryAddress(createDeliveryAddressDto);
+  }
+
+  @Patch('delivery-address/:address_uuid')
+  updateUserDeliveryAddress(
+    @Param('address_uuid') address_uuid: string,
+    @Body() updateDeliveryAddressDto: UpdateUserDeliveryAddressDto,
+  ) {
+    updateDeliveryAddressDto.uuid = address_uuid;
+    return this.usersService.updateUserDeliveryAddress(
+      updateDeliveryAddressDto,
+    );
+  }
+
+  @Delete('delivery-address/:address_uuid')
+  deletUserDeliveryAddress(@Param('address_uuid') address_uuid: string) {
+    return this.usersService.deleteUserDelivery(address_uuid);
   }
 }

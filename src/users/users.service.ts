@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserDeliveryAddress } from './entities/user-delivery-address.entity';
-import { CreateUserDeliveryAddressDto } from './dto/user-delivery-address.dto';
+import {
+  CreateUserDeliveryAddressDto,
+  UpdateUserDeliveryAddressDto,
+} from './dto/user-delivery-address.dto';
 import {
   UserAlreadyException,
   UserNotFoundException,
@@ -74,5 +77,18 @@ export class UsersService {
     createUserDeliveryDto: CreateUserDeliveryAddressDto,
   ): Promise<void> {
     await this.userDeliveryRepo.save(createUserDeliveryDto);
+  }
+
+  async updateUserDeliveryAddress(
+    updateDeliveryAddressDto: UpdateUserDeliveryAddressDto,
+  ): Promise<void> {
+    await this.userDeliveryRepo.update(
+      updateDeliveryAddressDto.uuid,
+      updateDeliveryAddressDto,
+    );
+  }
+
+  async deleteUserDelivery(uuid: string) {
+    await this.userDeliveryRepo.delete(uuid);
   }
 }
